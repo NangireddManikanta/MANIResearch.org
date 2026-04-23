@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MANI Research Organisation – Discover. Publish. Connect. Innovate.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
+<style>
+/* ===== CSS RESET & VARIABLES ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-deep:       #04050d;
+  --bg-card:       rgba(12,15,32,0.85);
+  --bg-glass:      rgba(255,255,255,0.04);
+  --border:        rgba(255,255,255,0.07);
+  --border-glow:   rgba(99,102,241,0.35);
+  --blue:          #6366f1;
+  --blue-bright:   #818cf8;
+  --violet:        #a855f7;
+  --cyan:          #22d3ee;
+  --text-primary:  #f0f1ff;
+  --text-secondary:#9ca3d4;
+  --text-muted:    #4b5280;
+  --glow-blue:     0 0 40px rgba(99,102,241,0.25);
+  --radius-card:   16px;
+  --radius-btn:    10px;
+  --font-head:     'Sora', sans-serif;
+  --font-body:     'DM Sans', sans-serif;
+  --nav-h:         68px;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg-deep); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 700px 500px at 10% 20%, rgba(99,102,241,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 400px at 85% 70%, rgba(168,85,247,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 400px 300px at 50% 90%, rgba(34,211,238,0.06) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ===== NAVBAR ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+  display: flex; align-items: center; padding: 0 40px;
+  background: rgba(4,5,13,0.82); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); z-index: 1000; gap: 24px;
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.logo-img { width: 44px; height: 44px; object-fit: contain; border-radius: 8px; filter: drop-shadow(0 0 10px rgba(99,102,241,0.5)); }
+.logo-text { font-family: var(--font-head); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.02em; background: linear-gradient(135deg, #fff 0%, var(--blue-bright) 50%, var(--violet) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+.nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 500; padding: 6px 14px; border-radius: 8px; transition: all 0.2s; }
+.nav-links a:hover { color: var(--text-primary); background: var(--bg-glass); }
+.nav-spacer { flex: 1; }
+.nav-search { position: relative; }
+.nav-search input { width: 220px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: 8px 16px 8px 36px; color: var(--text-primary); font-size: 0.85rem; font-family: var(--font-body); outline: none; transition: all 0.2s; }
+.nav-search input::placeholder { color: var(--text-muted); }
+.nav-search input:focus { border-color: var(--border-glow); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.nav-search .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: var(--radius-btn); font-family: var(--font-body); font-weight: 600; font-size: 0.875rem; cursor: pointer; text-decoration: none; transition: all 0.25s; border: none; }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+.btn-ghost:hover { border-color: var(--border-glow); background: var(--bg-glass); }
+.btn-primary { background: linear-gradient(135deg, var(--blue) 0%, var(--violet) 100%); color: #fff; box-shadow: 0 4px 20px rgba(99,102,241,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(99,102,241,0.45); }
+.btn-outline-blue { background: transparent; border: 1px solid rgba(99,102,241,0.5); color: var(--blue-bright); }
+.btn-outline-blue:hover { background: rgba(99,102,241,0.12); }
+.btn-outline-violet { background: transparent; border: 1px solid rgba(168,85,247,0.5); color: #c084fc; }
+.btn-outline-violet:hover { background: rgba(168,85,247,0.12); }
+
+/* API Status */
+.api-status { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 600; border: 1px solid; white-space: nowrap; }
+.api-status.online { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); color: #6ee7b7; }
+.api-status.offline { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); color: #f87171; }
+.api-status.checking { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3); color: #fbbf24; }
+.api-status .status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* ===== HERO ===== */
+.hero { position: relative; padding: calc(var(--nav-h) + 80px) 40px 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1280px; margin: 0 auto; z-index: 1; }
+.hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25); border-radius: 50px; padding: 5px 14px; font-size: 0.78rem; font-weight: 600; color: var(--blue-bright); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 24px; }
+.hero-tag .dot { width: 6px; height: 6px; background: var(--blue-bright); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.3); } }
+.hero h1 { font-family: var(--font-head); font-size: clamp(2.4rem, 4.5vw, 3.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: #fff; margin-bottom: 8px; }
+.hero h1 .gradient-text { background: linear-gradient(135deg, var(--blue-bright) 0%, var(--violet) 50%, var(--cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-sub { font-size: 1rem; color: var(--text-secondary); line-height: 1.7; max-width: 500px; margin: 20px 0 36px; }
+.hero-search { display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 14px; padding: 4px 4px 4px 20px; margin-bottom: 32px; max-width: 520px; transition: all 0.2s; }
+.hero-search:focus-within { border-color: var(--border-glow); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.hero-search input { flex: 1; background: none; border: none; outline: none; color: var(--text-primary); font-family: var(--font-body); font-size: 0.9rem; }
+.hero-search input::placeholder { color: var(--text-muted); }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
+.hero-btns .btn { padding: 12px 26px; font-size: 0.9rem; }
+.hero-stats { display: flex; gap: 32px; }
+.stat-val { font-family: var(--font-head); font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #fff, var(--blue-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+.stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+/* Hero Logo Visual */
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.hero-logo-display { position: relative; width: 380px; height: 380px; display: flex; align-items: center; justify-content: center; }
+.hero-logo-display::before { content: ''; position: absolute; inset: -20px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%); animation: heroGlow 4s ease-in-out infinite alternate; }
+@keyframes heroGlow { 0%{ transform:scale(0.95); opacity:0.6; } 100%{ transform:scale(1.05); opacity:1; } }
+.hero-logo-display img { width: 340px; height: 340px; object-fit: contain; filter: drop-shadow(0 0 60px rgba(99,102,241,0.4)) drop-shadow(0 0 120px rgba(168,85,247,0.2)); animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-12px); } }
+
+/* ===== SECTIONS ===== */
+.section { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 40px 80px; }
+.section-label { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 32px; color: #fff; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); max-width: 1280px; margin: 0 auto 80px; }
+
+/* Categories */
+.cats-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.cat-chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--bg-glass); border: 1px solid var(--border); border-radius: 50px; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+.cat-chip:hover { border-color: var(--border-glow); color: var(--text-primary); background: rgba(99,102,241,0.1); transform: translateY(-2px); }
+
+/* Why Cards */
+.why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.why-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 28px 24px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
+.why-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--blue), var(--violet), transparent); opacity: 0; transition: opacity 0.3s; }
+.why-card:hover { border-color: var(--border-glow); transform: translateY(-4px); box-shadow: var(--glow-blue); }
+.why-card:hover::before { opacity: 1; }
+.why-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 1.5rem; }
+.why-icon.blue { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25); }
+.why-icon.violet { background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.25); }
+.why-icon.cyan { background: rgba(34,211,238,0.12); border: 1px solid rgba(34,211,238,0.2); }
+.why-icon.green { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.2); }
+.why-card h3 { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: #fff; }
+.why-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+/* Feed Preview */
+.feed-preview { display: grid; grid-template-columns: 240px 1fr 260px; gap: 24px; align-items: start; }
+.sidebar-nav { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 12px 8px; }
+.sidebar-nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-radius: 10px; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+.sidebar-nav-item:hover, .sidebar-nav-item.active { background: rgba(99,102,241,0.1); color: var(--blue-bright); }
+.create-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; margin-top: 12px; border-radius: 10px; background: linear-gradient(135deg, var(--blue), var(--violet)); color: #fff; font-weight: 600; font-size: 0.875rem; cursor: pointer; border: none; font-family: var(--font-body); transition: all 0.25s; box-shadow: 0 4px 16px rgba(99,102,241,0.3); }
+.create-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(99,102,241,0.4); }
+.feed-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.feed-tab { padding: 10px 20px; font-size: 0.875rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+.feed-tab.active { color: var(--blue-bright); border-bottom-color: var(--blue-bright); }
+.feed-tab:hover { color: var(--text-secondary); }
+
+/* Empty States */
+.empty-feed { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 60px 40px; text-align: center; }
+.empty-feed-icon { font-size: 3.5rem; margin-bottom: 16px; }
+.empty-feed h3 { font-family: var(--font-head); font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.empty-feed p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px; }
+.empty-feed-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Sidebar Boxes */
+.trending-box, .suggested-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px; margin-bottom: 16px; }
+.box-title { font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 16px; }
+.empty-side { text-align: center; padding: 16px 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+/* Footer */
+footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 60px 40px 40px; max-width: 1280px; margin: 80px auto 0; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; max-width: 240px; margin-top: 12px; }
+.footer-socials { display: flex; gap: 10px; margin-top: 20px; }
+.social-btn { width: 36px; height: 36px; border-radius: 9px; background: var(--bg-glass); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: all 0.2s; font-size: 0.85rem; text-decoration: none; }
+.social-btn:hover { border-color: var(--border-glow); color: var(--blue-bright); }
+.footer-col h4 { font-family: var(--font-head); font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 16px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+.footer-col ul a:hover { color: var(--text-primary); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted); }
+
+/* Scroll animations */
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Modals */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; padding: 20px; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: rgba(10,12,28,0.98); border: 1px solid var(--border-glow); border-radius: 20px; padding: 40px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.3s; position: relative; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.modal-close:hover { background: var(--bg-glass); color: var(--text-primary); }
+.modal-logo { text-align: center; margin-bottom: 16px; }
+.modal-logo img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(99,102,241,0.5)); }
+.modal h2 { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; text-align: center; color: #fff; margin-bottom: 6px; }
+.modal-sub { text-align: center; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 28px; }
+.oauth-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 11px 20px; margin-bottom: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-glass); color: var(--text-primary); font-family: var(--font-body); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.oauth-btn:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.07); }
+.divider-or { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--text-muted); font-size: 0.78rem; }
+.divider-or::before, .divider-or::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.03em; }
+.form-group input, .form-group select { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 11px 16px; color: var(--text-primary); font-family: var(--font-body); font-size: 0.875rem; outline: none; transition: all 0.2s; }
+.form-group select option { background: #0a0c1c; }
+.form-group input:focus, .form-group select:focus { border-color: var(--border-glow); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.form-group input::placeholder { color: var(--text-muted); }
+.form-error { font-size: 0.75rem; color: #f87171; margin-top: 6px; display: none; padding: 8px 12px; background: rgba(248,113,113,0.1); border-radius: 8px; border: 1px solid rgba(248,113,113,0.2); }
+.form-error.show { display: block; }
+.modal-footer-text { text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: 20px; }
+.modal-footer-text a { color: var(--blue-bright); text-decoration: none; font-weight: 600; cursor: pointer; }
+.spinner { display: inline-block; width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Toast */
+.toast { position: fixed; bottom: 28px; right: 28px; background: rgba(12,15,32,0.97); border: 1px solid var(--border-glow); border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 12px; font-size: 0.875rem; color: var(--text-primary); z-index: 3000; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 8px 30px rgba(0,0,0,0.4); max-width: 360px; }
+.toast.show { transform: translateX(0); }
+
+/* Responsive */
+@media (max-width: 1100px) { .feed-preview { grid-template-columns: 1fr; } .feed-preview > *:first-child, .feed-preview > *:last-child { display: none; } .why-grid { grid-template-columns: repeat(2,1fr); } .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 768px) { nav { padding: 0 20px; gap: 12px; } .nav-links, .nav-search { display: none; } .hero { grid-template-columns: 1fr; padding: 120px 20px 60px; gap: 40px; } .hero-visual { display: none; } .hero h1 { font-size: 2.2rem; } .section { padding: 0 20px 60px; } footer { padding: 40px 20px; } .footer-grid { grid-template-columns: 1fr; gap: 28px; } .footer-bottom { flex-direction: column; gap: 10px; text-align: center; } .hero-stats { gap: 16px; flex-wrap: wrap; } }
+@media (max-width: 480px) { .why-grid { grid-template-columns: 1fr; } .hero-btns { flex-direction: column; } .hero-btns .btn { justify-content: center; } }
+</style>
+</head>
+<body>
+
+<!-- ====== NAVBAR ====== -->
+<nav>
+  <a href="#" class="logo">
+    <!-- MANI Logo Image — place mani-logo.jpg in same folder -->
+    <img class="logo-img" src="mani-logo.jpg" alt="MANI Research Organisation" onerror="this.style.display='none'" />
+    <span class="logo-text">MANI</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#explore">Explore</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#patents">Patents</a></li>
+  </ul>
+
+  <div class="nav-spacer"></div>
+
+  <div id="api-badge"></div>
+
+  <div class="nav-search">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="nav-search" placeholder="Search research, patents…" />
+  </div>
+
+  <a href="#" class="btn btn-ghost" id="nav-login-btn" onclick="openModal('login'); return false;">Login</a>
+  <a href="#" class="btn btn-primary" id="nav-signup-btn" onclick="openModal('signup'); return false;">Sign Up Free</a>
+</nav>
+
+
+<!-- ====== HERO ====== -->
+<section class="hero" id="home">
+  <div class="hero-content fade-in">
+    <div class="hero-tag">
+      <span class="dot"></span>
+      India's First Research + Patent Ecosystem
+    </div>
+
+    <h1>
+      Discover. Publish.<br>
+      <span class="gradient-text">Connect. Innovate.</span>
+    </h1>
+
+    <p class="hero-sub">
+      MANI — Multidisciplinary Advanced Network for Innovation — is India's modern platform for researchers, inventors, and institutions to publish research papers, showcase patents, and collaborate globally.
+    </p>
+
+    <div class="hero-search">
+      <input type="text" id="hero-search" placeholder="Search research, patents, authors, topics…" />
+      <button class="btn btn-primary" style="padding:10px 20px; font-size:0.85rem;" onclick="handleSearch()">Search</button>
+    </div>
+
+    <div class="hero-btns">
+      <a href="#explore" class="btn btn-primary">🔬 Explore Platform</a>
+      <a href="#" class="btn btn-outline-blue" onclick="openModal('signup'); return false;">📄 Publish Research</a>
+      <a href="#" class="btn btn-outline-violet" onclick="openModal('signup'); return false;">🧾 Publish Patent</a>
+    </div>
+
+    <!-- Real stats — start at 0, load from API -->
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-val" id="stat-papers">0</div>
+        <div class="stat-lbl">Research Papers<br>Published</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-patents-hero">0</div>
+        <div class="stat-lbl">Patents<br>Showcased</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-researchers">0</div>
+        <div class="stat-lbl">Researchers<br>Registered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-collab">0</div>
+        <div class="stat-lbl">Collaborations<br>Active</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual fade-in">
+    <div class="hero-logo-display">
+      <img src="mani-logo.jpg" alt="MANI Research Organisation" />
+    </div>
+  </div>
+</section>
+
+
+<!-- ====== CATEGORIES ====== -->
+<section class="section fade-in" id="categories">
+  <div class="section-label">Research & Patent Categories</div>
+  <div class="cats-grid">
+    <div class="cat-chip"><span>🤖</span> Artificial Intelligence</div>
+    <div class="cat-chip"><span>🧬</span> Biotechnology</div>
+    <div class="cat-chip"><span>🚀</span> Aerospace</div>
+    <div class="cat-chip"><span>⚡</span> Electrical Engineering</div>
+    <div class="cat-chip"><span>⚙️</span> Mechanical</div>
+    <div class="cat-chip"><span>💻</span> Computer Science</div>
+    <div class="cat-chip"><span>🏗️</span> Civil Engineering</div>
+    <div class="cat-chip"><span>🔬</span> Medical Research</div>
+    <div class="cat-chip"><span>⚛️</span> Physics</div>
+    <div class="cat-chip"><span>🧪</span> Chemistry</div>
+    <div class="cat-chip"><span>📐</span> Mathematics</div>
+    <div class="cat-chip"><span>🛸</span> Space Research</div>
+    <div class="cat-chip"><span>🌿</span> Green Energy</div>
+    <div class="cat-chip"><span>🤖</span> Robotics</div>
+    <div class="cat-chip"><span>🌾</span> Agriculture</div>
+    <div class="cat-chip"><span>🔧</span> Other</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ====== EXPLORE / FEED PREVIEW ====== -->
+<section class="section fade-in" id="explore">
+  <div class="section-label">Research & Patents Feed</div>
+  <div class="feed-preview">
+
+    <!-- Left Sidebar -->
+    <div>
+      <div class="sidebar-nav">
+        <div class="sidebar-nav-item active">🏠 Home Feed</div>
+        <div class="sidebar-nav-item">🔬 Research Papers</div>
+        <div class="sidebar-nav-item">🧾 Patents</div>
+        <div class="sidebar-nav-item" id="patents">🌐 Researchers</div>
+        <div class="sidebar-nav-item">🔖 Saved</div>
+        <div class="sidebar-nav-item">🔔 Notifications</div>
+        <div class="sidebar-nav-item">💬 Messages</div>
+        <button class="create-btn" onclick="openModal('signup')">✏️ Publish Content</button>
+      </div>
+    </div>
+
+    <!-- Feed Center — Empty until real content exists -->
+    <div>
+      <div class="feed-tabs">
+        <div class="feed-tab active">All</div>
+        <div class="feed-tab">Research</div>
+        <div class="feed-tab">Patents</div>
+        <div class="feed-tab">Trending</div>
+      </div>
+
+      <div class="empty-feed" id="feed-area">
+        <div class="empty-feed-icon">🔬</div>
+        <h3>No Content Published Yet</h3>
+        <p>
+          MANI just launched. Be the first researcher or inventor to publish here.<br>
+          All content is real, reviewed, and verified — no fake posts, ever.
+        </p>
+        <div class="empty-feed-btns">
+          <a href="#" class="btn btn-primary" onclick="openModal('signup'); return false;">🚀 Join & Publish</a>
+          <a href="#" class="btn btn-outline-blue" onclick="openModal('login'); return false;">🔑 Sign In</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar — Empty until real data exists -->
+    <div>
+      <div class="trending-box">
+        <div class="box-title">🔥 Trending Topics</div>
+        <div class="empty-side">
+          Trending hashtags will appear once researchers start publishing on MANI.
+        </div>
+      </div>
+      <div class="suggested-box">
+        <div class="box-title">👥 Researchers</div>
+        <div class="empty-side">
+          Researcher suggestions appear once members register and build their profiles.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ====== WHY MANI ====== -->
+<section class="section fade-in" id="about">
+  <div class="section-label">Why Choose MANI?</div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon blue">📄</div>
+      <h3>Publish Research</h3>
+      <p>Submit PDF/DOC/DOCX papers with real peer review workflows. Draft → Submitted → Screening → Under Review → Accepted.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon violet">🧾</div>
+      <h3>Showcase Patents</h3>
+      <p>Display inventions with full status tracking — Filed, Published, or Granted — across 10 technology categories.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon cyan">🌐</div>
+      <h3>Global Networking</h3>
+      <p>Follow researchers, collaborate across institutions, send direct messages, and build your professional academic profile.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon green">🔒</div>
+      <h3>Trusted & Secure</h3>
+      <p>JWT auth, bcrypt hashing, CSRF protection, content moderation, and admin oversight ensure a safe, verified environment.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <img class="logo-img" src="mani-logo.jpg" alt="MANI Logo" onerror="this.style.display='none'" />
+        <span class="logo-text">MANI</span>
+      </a>
+      <p class="footer-desc">Multidisciplinary Advanced Network for Innovation — India's first modern research and patent social publishing ecosystem.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="#" title="X / Twitter">𝕏</a>
+        <a class="social-btn" href="#" title="LinkedIn">in</a>
+        <a class="social-btn" href="#" title="Instagram">📷</a>
+        <a class="social-btn" href="#" title="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#explore">Explore Feed</a></li>
+        <li><a href="#" onclick="openModal('signup'); return false;">Publish Research</a></li>
+        <li><a href="#" onclick="openModal('signup'); return false;">Publish Patent</a></li>
+        <li><a href="#categories">Browse Categories</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Author Guidelines</a></li>
+        <li><a href="#">Patent Guide</a></li>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#about">About MANI</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Follow Us</h4>
+      <ul>
+        <li><a href="#">Twitter / X</a></li>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 MANI Research Organisation. All rights reserved.</span>
+    <span>Made with 🔬 for India's research community</span>
+  </div>
+</footer>
+
+
+<!-- ====== LOGIN MODAL ====== -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">✕</button>
+    <div class="modal-logo">
+      <img src="mani-logo.jpg" alt="MANI" onerror="this.style.display='none'" />
+    </div>
+    <h2>Welcome Back</h2>
+    <p class="modal-sub">Login to your MANI research account</p>
+
+    <button class="oauth-btn" onclick="handleGoogleAuth()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615Z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/><path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A9 9 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332Z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/></svg>
+      Continue with Google
+    </button>
+    <button class="oauth-btn" onclick="handlePhoneAuth()">📱 Continue with Phone (OTP)</button>
+
+    <div class="divider-or">or login with email</div>
+
+    <div class="form-group">
+      <label>EMAIL ADDRESS</label>
+      <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email" />
+    </div>
+    <div class="form-group">
+      <label>PASSWORD</label>
+      <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" />
+      <div class="form-error" id="login-error"></div>
+    </div>
+
+    <div style="text-align:right; margin-bottom:20px;">
+      <a href="#" style="font-size:0.78rem; color:var(--blue-bright); text-decoration:none;" onclick="handleForgotPwd(event)">Forgot password?</a>
+    </div>
+
+    <button class="btn btn-primary" id="login-btn" style="width:100%; padding:13px; font-size:0.9rem; justify-content:center;" onclick="submitLogin()">Login to MANI</button>
+
+    <p class="modal-footer-text">Don't have an account? <a onclick="switchModal('login','signup')">Sign up free →</a></p>
+  </div>
+</div>
+
+
+<!-- ====== SIGNUP MODAL ====== -->
+<div class="modal-overlay" id="modal-signup">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signup')">✕</button>
+    <div class="modal-logo">
+      <img src="mani-logo.jpg" alt="MANI" onerror="this.style.display='none'" />
+    </div>
+    <h2>Join MANI</h2>
+    <p class="modal-sub">Be part of India's research revolution</p>
+
+    <button class="oauth-btn" onclick="handleGoogleAuth()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615Z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/><path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A9 9 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332Z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/></svg>
+      Continue with Google
+    </button>
+    <button class="oauth-btn" onclick="handlePhoneAuth()">📱 Continue with Phone (OTP)</button>
+
+    <div class="divider-or">or sign up with email</div>
+
+    <div class="form-group">
+      <label>FULL NAME *</label>
+      <input type="text" id="su-name" placeholder="Your full name" />
+    </div>
+    <div class="form-group">
+      <label>EMAIL ADDRESS *</label>
+      <input type="email" id="su-email" placeholder="your@email.com" autocomplete="email" />
+    </div>
+    <div class="form-group">
+      <label>ROLE *</label>
+      <select id="su-role">
+        <option value="">— Select your role —</option>
+        <option value="student">Student</option>
+        <option value="researcher">Researcher / Scientist</option>
+        <option value="professor">Professor / Faculty</option>
+        <option value="inventor">Inventor / Innovator</option>
+        <option value="startup">Startup Founder</option>
+        <option value="institution">Institution Representative</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>INSTITUTION / ORGANIZATION</label>
+      <input type="text" id="su-institution" placeholder="University or organization name" />
+    </div>
+    <div class="form-group">
+      <label>PASSWORD * (min 8 characters)</label>
+      <input type="password" id="su-password" placeholder="Create a strong password" autocomplete="new-password" />
+    </div>
+    <div class="form-group">
+      <label>CONFIRM PASSWORD *</label>
+      <input type="password" id="su-confirm" placeholder="Repeat your password" autocomplete="new-password" />
+      <div class="form-error" id="signup-error"></div>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-size:0.75rem; color:var(--text-muted);">
+        <input type="checkbox" id="su-terms" style="width:auto; margin-top:2px; flex-shrink:0;" />
+        I agree to the <a href="#" style="color:var(--blue-bright);">Terms of Service</a>&nbsp;and&nbsp;<a href="#" style="color:var(--blue-bright);">Privacy Policy</a>
+      </label>
+    </div>
+
+    <button class="btn btn-primary" id="signup-btn" style="width:100%; padding:13px; font-size:0.9rem; justify-content:center;" onclick="submitSignup()">Create My MANI Account</button>
+
+    <p class="modal-footer-text">Already have an account? <a onclick="switchModal('signup','login')">Login →</a></p>
+  </div>
+</div>
+
+
+<!-- ====== TOAST ====== -->
+<div class="toast" id="toast">
+  <span id="toast-icon">ℹ️</span>
+  <span id="toast-msg">Action completed</span>
+</div>
+
+
+<!-- ====== JAVASCRIPT ====== -->
+<script>
+// ============================================================
+// CONFIGURATION
+// Update API_BASE to your deployed backend URL before going live
+// Example: 'https://mani-api.onrender.com/api'
+// ============================================================
+const API_BASE = 'http://localhost:5000/api';
+
+// ============================================================
+// SCROLL ANIMATIONS
+// ============================================================
+const fadeEls = document.querySelectorAll('.fade-in');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+fadeEls.forEach(el => obs.observe(el));
+
+// ============================================================
+// MODAL SYSTEM
+// ============================================================
+function openModal(name) {
+  document.getElementById('modal-' + name).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(name) {
+  document.getElementById('modal-' + name).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function switchModal(from, to) {
+  closeModal(from);
+  setTimeout(() => openModal(to), 200);
+}
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', function(e) {
+    if (e.target === this) { this.classList.remove('open'); document.body.style.overflow = ''; }
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+});
+
+// ============================================================
+// TOAST
+// ============================================================
+let _tt;
+function showToast(msg, icon = 'ℹ️') {
+  document.getElementById('toast-msg').textContent = msg;
+  document.getElementById('toast-icon').textContent = icon;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('show'), 4500);
+}
+
+// ============================================================
+// BACKEND HEALTH CHECK
+// ============================================================
+async function checkBackend() {
+  const el = document.getElementById('api-badge');
+  el.innerHTML = '<span class="api-status checking"><span class="status-dot"></span>Connecting…</span>';
+  try {
+    const r = await fetch(API_BASE.replace('/api','') + '/health', { signal: AbortSignal.timeout(5000) });
+    if (r.ok) {
+      el.innerHTML = '<span class="api-status online"><span class="status-dot"></span>Backend Online</span>';
+      loadStats();
+    } else throw new Error();
+  } catch {
+    el.innerHTML = '<span class="api-status offline"><span class="status-dot"></span>Backend Offline</span>';
+  }
+}
+
+// ============================================================
+// REAL STATS (starts at 0 — loaded from backend only)
+// ============================================================
+async function loadStats() {
+  try {
+    const r = await fetch(`${API_BASE}/stats`);
+    if (!r.ok) return;
+    const d = await r.json();
+    animCount('stat-papers', d.papers || 0);
+    animCount('stat-patents-hero', d.patents || 0);
+    animCount('stat-researchers', d.users || 0);
+    animCount('stat-collab', d.collaborations || 0);
+  } catch { /* stay at 0 */ }
+}
+function animCount(id, target) {
+  const el = document.getElementById(id);
+  if (!el || target === 0) return;
+  let cur = 0; const inc = Math.ceil(target / 40);
+  const t = setInterval(() => { cur = Math.min(cur + inc, target); el.textContent = cur.toLocaleString(); if (cur >= target) clearInterval(t); }, 40);
+}
+
+// ============================================================
+// LOGIN
+// ============================================================
+async function submitLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  err.classList.remove('show');
+
+  if (!email || !password) { err.textContent = 'Please enter your email and password.'; err.classList.add('show'); return; }
+  if (!isValidEmail(email)) { err.textContent = 'Please enter a valid email address.'; err.classList.add('show'); return; }
+
+  btn.innerHTML = '<span class="spinner"></span> Logging in…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (res.ok && data.token) {
+      localStorage.setItem('mani_token', data.token);
+      localStorage.setItem('mani_user', JSON.stringify(data.user));
+      closeModal('login');
+      showToast(`Welcome back, ${data.user.fullName}! 👋`, '✅');
+      updateNavUser(data.user);
+    } else {
+      err.textContent = data.message || 'Incorrect email or password.';
+      err.classList.add('show');
+    }
+  } catch {
+    err.textContent = 'Cannot reach server. Please ensure the backend is running on port 5000.';
+    err.classList.add('show');
+  } finally {
+    btn.innerHTML = 'Login to MANI';
+    btn.disabled = false;
+  }
+}
+
+// ============================================================
+// SIGNUP
+// ============================================================
+async function submitSignup() {
+  const fullName = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const role = document.getElementById('su-role').value;
+  const institution = document.getElementById('su-institution').value.trim();
+  const password = document.getElementById('su-password').value;
+  const confirm = document.getElementById('su-confirm').value;
+  const terms = document.getElementById('su-terms').checked;
+  const btn = document.getElementById('signup-btn');
+  const err = document.getElementById('signup-error');
+  err.classList.remove('show');
+
+  if (!fullName || !email || !role || !password || !confirm) {
+    err.textContent = 'Please fill in all required fields (*).'; err.classList.add('show'); return;
+  }
+  if (!isValidEmail(email)) {
+    err.textContent = 'Please enter a valid email address.'; err.classList.add('show'); return;
+  }
+  if (password.length < 8) {
+    err.textContent = 'Password must be at least 8 characters.'; err.classList.add('show'); return;
+  }
+  if (password !== confirm) {
+    err.textContent = 'Passwords do not match.'; err.classList.add('show'); return;
+  }
+  if (!terms) {
+    err.textContent = 'Please accept the Terms of Service to continue.'; err.classList.add('show'); return;
+  }
+
+  btn.innerHTML = '<span class="spinner"></span> Creating account…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ fullName, email, password, role, institution })
+    });
+    const data = await res.json();
+    if (res.ok && data.token) {
+      localStorage.setItem('mani_token', data.token);
+      localStorage.setItem('mani_user', JSON.stringify(data.user));
+      closeModal('signup');
+      showToast(`Welcome to MANI, ${data.user.fullName}! 🎉`, '🚀');
+      updateNavUser(data.user);
+    } else {
+      err.textContent = data.message || 'Registration failed. Please try again.';
+      err.classList.add('show');
+    }
+  } catch {
+    err.textContent = 'Cannot reach server. Please ensure the backend is running on port 5000.';
+    err.classList.add('show');
+  } finally {
+    btn.innerHTML = 'Create My MANI Account';
+    btn.disabled = false;
+  }
+}
+
+// ============================================================
+// GOOGLE OAUTH
+// ============================================================
+function handleGoogleAuth() {
+  window.location.href = `${API_BASE}/auth/google`;
+}
+
+// ============================================================
+// PHONE OTP (Firebase)
+// ============================================================
+function handlePhoneAuth() {
+  showToast('Phone OTP — configure Firebase in backend .env', '📱');
+}
+
+// ============================================================
+// FORGOT PASSWORD
+// ============================================================
+async function handleForgotPwd(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) { showToast('Enter your email in the field above first.', '⚠️'); return; }
+  try {
+    const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    if (res.ok) showToast('Password reset email sent! Check your inbox.', '📧');
+    else showToast('No account found with that email.', '⚠️');
+  } catch {
+    showToast('Server not reachable. Start the backend first.', '❌');
+  }
+}
+
+// ============================================================
+// UPDATE NAV AFTER AUTH
+// ============================================================
+function updateNavUser(user) {
+  const loginBtn = document.getElementById('nav-login-btn');
+  const signupBtn = document.getElementById('nav-signup-btn');
+  if (loginBtn) { loginBtn.textContent = '👤 ' + (user.fullName || 'Profile').split(' ')[0]; loginBtn.onclick = () => showToast('Profile page — coming soon!', '👤'); }
+  if (signupBtn) { signupBtn.textContent = 'Logout'; signupBtn.onclick = doLogout; }
+}
+function doLogout() {
+  localStorage.removeItem('mani_token');
+  localStorage.removeItem('mani_user');
+  showToast('Logged out. See you soon! 👋', '👋');
+  setTimeout(() => window.location.reload(), 1200);
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+function handleSearch() {
+  const q = document.getElementById('hero-search').value.trim();
+  if (!q) return;
+  showToast(`Searching "${q}" — please sign in to use full search.`, '🔍');
+}
+document.getElementById('hero-search').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
+document.getElementById('nav-search').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
+
+// ============================================================
+// CATEGORY CHIPS
+// ============================================================
+document.querySelectorAll('.cat-chip').forEach(chip => {
+  chip.addEventListener('click', function() { showToast('Sign in to browse: ' + this.textContent.trim(), '🔭'); });
+});
+
+// ============================================================
+// NAV TABS
+// ============================================================
+document.querySelectorAll('.feed-tab').forEach(tab => {
+  tab.addEventListener('click', function() { document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active')); this.classList.add('active'); });
+});
+document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+  item.addEventListener('click', function() { document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active')); this.classList.add('active'); });
+});
+
+// ============================================================
+// ENTER KEY ON PASSWORD FIELD
+// ============================================================
+document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') submitLogin(); });
+document.getElementById('su-confirm').addEventListener('keydown', e => { if (e.key === 'Enter') submitSignup(); });
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+// ============================================================
+// INIT ON LOAD
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const stored = localStorage.getItem('mani_user');
+  if (stored) { try { updateNavUser(JSON.parse(stored)); } catch {} }
+  checkBackend();
+});
+</script>
+</body>
+</html>
